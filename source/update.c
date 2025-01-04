@@ -1,7 +1,6 @@
+#include "headers/globals.h"
 #include "headers/update.h"
-
-char board[3][3] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-char currentPlayer = 'X';
+#include "headers/debug.h"
 
 void UpdateObjects() {
     // Controlla le condizioni di vittoria o pareggio
@@ -9,12 +8,21 @@ void UpdateObjects() {
 }
 
 void PlaceMark(int row, int col) {
-    // Verifica se la casella è vuota prima di posizionare il simbolo
     if (board[row][col] == ' ') {
-        board[row][col] = currentPlayer;
-        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        board[row][col] = p1.myTurn ? 'X' : 'O';
+        
+        p1.myTurn = !p1.myTurn;
+        p2.myTurn = !p2.myTurn;
+
+        /*
+        debug_send("New Board:\n%c %c %c\n%c %c %c\n%c %c %c\n",
+            board[0][0], board[0][1], board[0][2],
+            board[1][0], board[1][1], board[1][2],
+            board[2][0], board[2][1], board[2][2]);
+        */
     }
 }
+
 
 void CheckWinCondition() {
     // Controlla le condizioni di vittoria o pareggio
