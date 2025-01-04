@@ -3,4 +3,7 @@
 
 void DrawObjects();
 
+void DrawBoard(char board[3][3]);
+void DrawCursor(int x, int y);
+
 #endif
