@@ -1,39 +1,44 @@
-#include <stdio.h>
+/*===========================================
+        GRRLIB (GX Version)
+        - Minimal Example -
+
+        Draw a Green Square
+============================================*/
+#include <grrlib.h>
+
 #include <stdlib.h>
-#include <string.h>
-#include <malloc.h>
-#include <ogcsys.h>
-#include <gccore.h>
 #include <wiiuse/wpad.h>
 
-static u32 *xfb;
-static GXRModeObj *rmode;
+int main(int argc, char **argv) {
+    // Initialise the Graphics & Video subsystem
+    GRRLIB_Init();
 
+    // Initialise the Wiimotes
+    WPAD_Init();
 
-void Initialise() {
-  
-	VIDEO_Init();
-	PAD_Init();
- 
-	rmode = VIDEO_GetPreferredMode(NULL);
+    // Define the color green using the RGBA macro
+    u32 green = RGBA(0, 255, 0, 255);  // RGBA for green
 
-	xfb = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
-	console_init(xfb,20,20,rmode->fbWidth,rmode->xfbHeight,rmode->fbWidth*VI_DISPLAY_PIX_SZ);
- 
-	VIDEO_Configure(rmode);
-	VIDEO_SetNextFramebuffer(xfb);
-	VIDEO_SetBlack(FALSE);
-	VIDEO_Flush();
-	VIDEO_WaitVSync();
-	if(rmode->viTVMode&VI_NON_INTERLACE) VIDEO_WaitVSync();
-}
+    // Loop forever
+    while(1) {
 
+        WPAD_ScanPads();  // Scan the Wiimotes
 
-int main() {
- 
-	Initialise();
- 
-	printf("Hello World!\n");
- 
-	return 0;
+        // If [HOME] was pressed on the first Wiimote, break out of the loop
+        if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)  break;
+
+        // Clear the screen with black
+        GRRLIB_FillScreen(0x000000FF);
+
+        // Draw a green square at position (100, 100) with size 50x50
+        GRRLIB_Rectangle(100, 100, 50, 50, green, true);
+
+        // Render the frame buffer to the TV
+        GRRLIB_Render();
+    }
+
+    // Clear the memory allocated by GRRLIB
+    GRRLIB_Exit();
+
+    exit(0);  // Use exit() to exit a program, do not use 'return' from main()
 }
