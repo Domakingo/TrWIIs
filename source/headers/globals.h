@@ -15,8 +15,6 @@ typedef struct {
 extern Player p1;
 extern Player p2;
 
-extern Player currentPlayer();
-
 // Screen
 extern const int screenWidth;
 extern const int screenHeight;
@@ -36,5 +34,8 @@ extern const int cellSize;
 extern const ushort boardThickness;
 extern const ushort checksThickness;
 
+
+// Functions
+extern Player currentPlayer();
 
 #endif

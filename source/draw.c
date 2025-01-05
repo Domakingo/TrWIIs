@@ -1,13 +1,39 @@
 #include <grrlib.h>
 
+#include "headers/assets.h"
 #include "headers/globals.h"
 #include "headers/draw.h"
 #include "headers/input.h"
 #include "headers/debug.h"
 
+void LoadAssets() {
+    // Load the images
+    backgroundTex = GRRLIB_LoadTexture(background_jpg);
+    if (backgroundTex == NULL) {
+        debug_send("Failed to load background.jpg\n");
+    }
+    
+    gridTex = GRRLIB_LoadTexture(grid_png);
+    if (gridTex == NULL) {
+        debug_send("Failed to load grid.png\n");
+    }
+}
+
+void FreeAssets() {
+    // Free the textures
+    GRRLIB_FreeTexture(backgroundTex);
+    GRRLIB_FreeTexture(gridTex);
+}
+
 void DrawObjects() {
     // Clear the screen with black
     GRRLIB_FillScreen(0x000000FF);
+
+    // Draw the background image
+    GRRLIB_DrawImg(0, 0, backgroundTex, 0, 1, 1, 0xFFFFFFFF);
+
+    // Draw the grid image
+    GRRLIB_DrawImg(gridStartX, gridStartY, gridTex, 0, 1, 1, 0xFFFFFFFF);
 
     // Draw the Tic-Tac-Toe board
     DrawBoard(board);
@@ -50,13 +76,6 @@ void DrawBoard(char board[3][3]) {
                     GRRLIB_Circle(gridStartX + cellSize * j + cellSize / 2, gridStartY + cellSize * i + cellSize / 2, (cellSize / 2) - t, p2.color, false);
                 }
             }
-        }
-    }
-
-    for (int i = 1; i < 3; i++) {
-        for (int t = 0; t < boardThickness; t++) {
-            GRRLIB_Line(gridStartX + cellSize * i + t, gridStartY, gridStartX + cellSize * i + t, gridStartY + 3 * cellSize, 0xFFFFFFFF);
-            GRRLIB_Line(gridStartX, gridStartY + cellSize * i + t, gridStartX + 3 * cellSize, gridStartY + cellSize * i + t, 0xFFFFFFFF);
         }
     }
 }

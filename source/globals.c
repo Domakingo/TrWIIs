@@ -23,6 +23,8 @@ const int cellSize = 100;
 const ushort boardThickness = 3;
 const ushort checksThickness = 5;
 
+
+// Functions
 // Return the current player
 Player currentPlayer() {
     return (p1.myTurn) ? p1 : p2;
