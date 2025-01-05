@@ -1,6 +1,4 @@
-#include "headers/globals.h"
 #include "headers/update.h"
-#include "headers/debug.h"
 
 void UpdateObjects() {
     // Controlla le condizioni di vittoria o pareggio

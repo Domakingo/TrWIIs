@@ -1,16 +1,14 @@
-#include <grrlib.h>
-
-#include "headers/assets.h"
-#include "headers/globals.h"
 #include "headers/draw.h"
-#include "headers/input.h"
-#include "headers/debug.h"
+
+bool hasVibrated = false;
+int prevHoveredRow = -1;
+int prevHoveredCol = -1;
 
 void LoadAssets() {
     // Load the images
-    backgroundTex = GRRLIB_LoadTexture(background_jpg);
+    backgroundTex = GRRLIB_LoadTexture(background_png);
     if (backgroundTex == NULL) {
-        debug_send("Failed to load background.jpg\n");
+        debug_send("Failed to load background.png\n");
     }
     
     gridTex = GRRLIB_LoadTexture(grid_png);
@@ -61,9 +59,21 @@ void DrawBoard(char board[3][3]) {
         if (board[hoveredRow][hoveredCol] == ' ') {
             // Draw the hovered cell with the specified color
             GRRLIB_Rectangle(gridStartX + hoveredCol * cellSize, gridStartY + hoveredRow * cellSize, cellSize, cellSize, hoveredCellColor, true);
+
+            // Make the controller vibrate if the hovered cell has changed
+            if (hoveredRow != prevHoveredRow || hoveredCol != prevHoveredCol) {
+                ActivateRumble(&current, 1);
+                prevHoveredRow = hoveredRow;
+                prevHoveredCol = hoveredCol;
+            }
         }
+    } else {
+        // Reset the previously hovered cell if the cursor is out of bounds
+        prevHoveredRow = -1;
+        prevHoveredCol = -1;
     }
 
+    // Draw the marks on the board
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (board[i][j] == 'X') {

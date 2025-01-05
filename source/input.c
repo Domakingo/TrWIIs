@@ -1,10 +1,4 @@
-#include <wiiuse/wpad.h>
-#include <stdlib.h>
-
-#include "headers/globals.h"
 #include "headers/input.h"
-#include "headers/update.h"
-#include "headers/debug.h"
 
 void HandleInput() {
     Player current = currentPlayer();
@@ -35,5 +29,4 @@ void HandleInput() {
             }
         }
     }
-
 }

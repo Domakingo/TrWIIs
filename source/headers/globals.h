@@ -1,19 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include <wiiuse/wpad.h>
-
-// Players
-typedef struct {
-    ushort id;
-    ir_t ir;
-    char check;
-    uint32_t color;
-    bool myTurn;
-} Player;
-
-extern Player p1;
-extern Player p2;
+#include <stdint.h>
 
 // Screen
 extern const int screenWidth;
@@ -31,11 +19,10 @@ extern const int gridSize;
 extern const int cellSize;
 
 // Thickness of the lines
-extern const ushort boardThickness;
-extern const ushort checksThickness;
+extern const unsigned short boardThickness;
+extern const unsigned short checksThickness;
 
 
 // Functions
-extern Player currentPlayer();
 
 #endif

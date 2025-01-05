@@ -4,7 +4,7 @@
 #include <grrlib.h>
 
 #include "gfx/img/grid_png.h"
-#include "gfx/img/background_jpg.h"
+#include "gfx/img/background_png.h"
 
 // Assets
 // Images
