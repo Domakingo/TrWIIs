@@ -18,7 +18,7 @@ include $(DEVKITPPC)/wii_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source
-DATA		:=	source/gfx/img
+DATA		:=	source/assets/gfx/img source/assets/audio
 INCLUDES	:=
 
 #---------------------------------------------------------------------------------
@@ -36,6 +36,7 @@ LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 LIBS := -lgrrlib -lpngu $(shell $(PREFIX)pkg-config --libs freetype2 libpng libjpeg) -lfat
 LIBS += -lwiiuse
+LIBS += -lasnd
 #LIBS += -lmodplay -laesnd
 LIBS += -lbte -logc -lm
 
@@ -139,6 +140,14 @@ $(OFILES_SOURCES) : $(HFILES)
 # This rule links in binary data with the .png extension
 #---------------------------------------------------------------------------------
 %.png.o	:	%.png
+#---------------------------------------------------------------------------------
+	@echo $(notdir $<)
+	$(bin2o)
+
+#---------------------------------------------------------------------------------
+# This rule links in binary data with the .wav extension
+#---------------------------------------------------------------------------------
+%.wav.o	:	%.wav
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	$(bin2o)

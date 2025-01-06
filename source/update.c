@@ -1,6 +1,7 @@
 #include "headers/update.h"
 #include "headers/players.h"
 #include "headers/globals.h"
+#include "headers/audio.h"
 #include "headers/debug.h"
 
 void UpdateObjects() {
@@ -11,6 +12,8 @@ void UpdateObjects() {
 void PlaceMark(int row, int col) {
     if (board[row][col] == ' ') {
         board[row][col] = p1.myTurn ? 'X' : 'O';
+
+        PlayAudio(&placeSound, 100, false, 1.0f, false);
         
         p1.myTurn = !p1.myTurn;
         p2.myTurn = !p2.myTurn;
@@ -23,7 +26,6 @@ void PlaceMark(int row, int col) {
         */
     }
 }
-
 
 void CheckWinCondition() {
     // Controlla le condizioni di vittoria o pareggio

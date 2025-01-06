@@ -3,8 +3,8 @@
 
 #include <grrlib.h>
 
-#include "gfx/img/grid_png.h"
-#include "gfx/img/background_png.h"
+#include "assets/gfx/img/grid_png.h"
+#include "assets/gfx/img/background_png.h"
 
 // Assets
 // Images

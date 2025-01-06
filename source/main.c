@@ -4,6 +4,7 @@
 
 #include "headers/engine.h"
 #include "headers/draw.h"
+#include "headers/audio.h"
 #include "headers/debug.h"
 
 int main(int argc, char **argv) {
@@ -22,6 +23,7 @@ int main(int argc, char **argv) {
 
     // Load the assets
     LoadAssets();
+    InitializeAudioAssets();
 
     GameLoop(); // Start the game loop
 

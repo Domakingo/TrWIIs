@@ -3,8 +3,19 @@
 #include <unistd.h>
 
 // Define the players
-Player p1 = {.id = 0, .check = 'X', .color = 0x2CE8F5FF, .myTurn = true};
-Player p2 = {.id = 1, .check = 'O', .color = 0xFF0044FF, .myTurn = false};
+Player p1 = {
+    .id = 0,
+    .check = 'X',
+    .color = 0x2CE8F5FF,
+    .myTurn = true
+};
+
+Player p2 = {
+    .id = 1,
+    .check = 'O',
+    .color = 0xFF0044FF,
+    .myTurn = false
+};
 
 // Return the current player
 Player currentPlayer() {
