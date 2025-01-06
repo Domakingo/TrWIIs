@@ -20,7 +20,7 @@ extern const int cellSize;
 
 // Thickness of the lines
 extern const unsigned short boardThickness;
-extern const unsigned short checksThickness;
+extern const unsigned short marksThickness;
 
 
 // Functions

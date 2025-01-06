@@ -1,4 +1,12 @@
+#include <network.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <gccore.h>
+
 #include "headers/debug.h"
+#include "headers/globals.h"
 
 static int debug_socket = -1;
 static struct sockaddr_in debug_addr;

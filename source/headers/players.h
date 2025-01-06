@@ -4,10 +4,9 @@
 #include <wiiuse/wpad.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <unistd.h>
 
 typedef struct {
-    ushort id;
+    unsigned short id;
     ir_t ir;
     char check;
     uint32_t color;
@@ -18,6 +17,6 @@ extern Player p1;
 extern Player p2;
 
 Player currentPlayer();
-void ActivateRumble(Player* player, unsigned int millis);
+void ActivateRumble(Player* player, unsigned short millis);
 
 #endif

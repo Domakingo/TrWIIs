@@ -3,7 +3,6 @@
 #include <wiiuse/wpad.h>
 
 #include "headers/engine.h"
-#include "headers/input.h"
 #include "headers/draw.h"
 #include "headers/debug.h"
 
@@ -24,8 +23,7 @@ int main(int argc, char **argv) {
     // Load the assets
     LoadAssets();
 
-    // Start the game loop
-    GameLoop();
+    GameLoop(); // Start the game loop
 
     // Clear the memory allocated by GRRLIB
     GRRLIB_Exit();

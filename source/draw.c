@@ -1,4 +1,11 @@
+#include <grrlib.h>
+#include <wiiuse/wpad.h>
+
 #include "headers/draw.h"
+#include "headers/players.h"
+#include "headers/assets.h"
+#include "headers/globals.h"
+#include "headers/debug.h"
 
 bool hasVibrated = false;
 int prevHoveredRow = -1;
@@ -77,12 +84,12 @@ void DrawBoard(char board[3][3]) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (board[i][j] == 'X') {
-                for (int t = 0; t < checksThickness; t++) {
+                for (int t = 0; t < marksThickness; t++) {
                     GRRLIB_Line(gridStartX + cellSize * j + t, gridStartY + cellSize * i, gridStartX + cellSize * (j + 1) + t, gridStartY + cellSize * (i + 1), p1.color);
                     GRRLIB_Line(gridStartX + cellSize * (j + 1) + t, gridStartY + cellSize * i, gridStartX + cellSize * j + t, gridStartY + cellSize * (i + 1), p1.color);
                 }
             } else if (board[i][j] == 'O') {
-                for (int t = 0; t < checksThickness; t++) {
+                for (int t = 0; t < marksThickness; t++) {
                     GRRLIB_Circle(gridStartX + cellSize * j + cellSize / 2, gridStartY + cellSize * i + cellSize / 2, (cellSize / 2) - t, p2.color, false);
                 }
             }

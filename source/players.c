@@ -1,5 +1,7 @@
 #include "headers/players.h"
 
+#include <unistd.h>
+
 // Define the players
 Player p1 = {.id = 0, .check = 'X', .color = 0x2CE8F5FF, .myTurn = true};
 Player p2 = {.id = 1, .check = 'O', .color = 0xFF0044FF, .myTurn = false};
@@ -10,8 +12,8 @@ Player currentPlayer() {
 }
 
 // Activate the rumble feature for the specified player
-void ActivateRumble(Player* player, unsigned int millis) {
+void ActivateRumble(Player* player, unsigned short millis) {
     WPAD_Rumble(player->id, 1);
-    usleep(millis);
+    usleep(millis * 1000);
     WPAD_Rumble(player->id, 0);
 }

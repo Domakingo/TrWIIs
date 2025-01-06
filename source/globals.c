@@ -17,7 +17,7 @@ const int cellSize = 100;
 
 // Thickness of the lines
 const unsigned short boardThickness = 3;
-const unsigned short checksThickness = 5;
+const unsigned short marksThickness = 5;
 
 
 // Functions

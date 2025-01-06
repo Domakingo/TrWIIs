@@ -1,13 +1,8 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-#include <grrlib.h>
-#include <wiiuse/wpad.h>
-
-#include "players.h"
-#include "assets.h"
-#include "globals.h"
-#include "debug.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 extern bool hasVibrated;
 extern int prevHoveredRow;
