@@ -11,6 +11,8 @@ typedef struct {
     uint8_t *buffer;
     uint32_t size;
     int voice;
+    bool loop;
+    bool autoFree;
 } AudioAsset;
 
 extern AudioAsset placeSound;
@@ -19,7 +21,8 @@ extern AudioAsset placeSound;
 void FreeAudio(AudioAsset *audioAsset);
 void InitializeAudioAssets();
 AudioAsset CreateAudioAsset(const uint8_t *buffer, uint32_t size);
-void PlayAudio(AudioAsset *audioAsset, int volumePercent, bool loop, float pitch, bool autoFree);
+void PlayAudioAsync(AudioAsset *audioAsset, int volumePercent, float pitch);
+void UpdateAudioLoop(AudioAsset *audioAsset);
 void StopAudio(const AudioAsset *audioAsset);
 
 #endif

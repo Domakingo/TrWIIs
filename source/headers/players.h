@@ -8,7 +8,7 @@
 typedef struct {
     unsigned short id;
     ir_t ir;
-    char check;
+    char mark;
     uint32_t color;
     bool myTurn;
 } Player;
@@ -16,7 +16,8 @@ typedef struct {
 extern Player p1;
 extern Player p2;
 
-Player currentPlayer();
+Player* currentPlayer();
+Player* waitingPlayer();
 void ActivateRumble(Player* player, unsigned short millis);
 
 #endif

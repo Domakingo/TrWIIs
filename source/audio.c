@@ -18,51 +18,63 @@ void InitializeAudioAssets() {
 }
 
 AudioAsset CreateAudioAsset(const uint8_t *buffer, uint32_t size) {
+    if (!buffer || size == 0) {
+        debug_send("Invalid buffer or size in CreateAudioAsset\n");
+        AudioAsset audioAsset = { NULL, 0, -1, false, false };
+        return audioAsset;
+    }
+    
     debug_send("Creating audio asset...\n");
     AudioAsset audioAsset;
     audioAsset.buffer = (uint8_t *)buffer;
     audioAsset.size = size;
     audioAsset.voice = -1; // Initialize voice to -1 indicating no voice assigned yet
+    audioAsset.loop = false;
+    audioAsset.autoFree = false;
     debug_send("Audio asset created with size: %u\n", size);
     return audioAsset;
 }
 
-void PlayAudio(AudioAsset *audioAsset, int volumePercent, bool loop, float pitch, bool autoFree) {
-    if (audioAsset->buffer == NULL) {
-        debug_send("Audio buffer is NULL\n");
+void PlayAudioAsync(AudioAsset *audioAsset, int volumePercent, float pitch) {
+    if (!audioAsset || !audioAsset->buffer) {
+        debug_send("Invalid audio asset or buffer is NULL\n");
+        return;
+    }
+    if (volumePercent < 0 || volumePercent > 100) {
+        debug_send("Invalid volume percent: %d\n", volumePercent);
+        return;
+    }
+    if (pitch <= 0.0f) {
+        debug_send("Invalid pitch: %f\n", pitch);
         return;
     }
 
-    debug_send("Playing audio...\n");
+    debug_send("Playing audio asynchronously...\n");
     int volume = (volumePercent * 255) / 100;
     audioAsset->voice = ASND_GetFirstUnusedVoice();
-    debug_send("Assigned voice: %d\n", audioAsset->voice);
-
     if (audioAsset->voice < 0) {
         debug_send("No available voice for audio playback\n");
         return;
     }
 
     ASND_SetVoice(audioAsset->voice, VOICE_STEREO_8BIT, 48000 * pitch, 0, audioAsset->buffer, audioAsset->size, volume, volume, NULL);
-    debug_send("Audio playback started with volume: %d\n", volume);
+    debug_send("Audio playback started with volume: %d on voice: %d\n", volume, audioAsset->voice);
+}
 
-    // Check the status of the voice
+void UpdateAudioLoop(AudioAsset *audioAsset) {
+    if (!audioAsset || audioAsset->voice < 0) {
+        return;
+    }
+
     int status = ASND_StatusVoice(audioAsset->voice);
-    debug_send("Voice status after setting: %d\n", status);
-
-    // Manual loop handling
-    if (loop) {
-        while (ASND_StatusVoice(audioAsset->voice) != SND_UNUSED) {
-            usleep(1000); // Sleep for a short time to prevent busy waiting
+    if (status == SND_UNUSED) {
+        if (audioAsset->loop) {
+            debug_send("Restarting looped audio...\n");
+            PlayAudioAsync(audioAsset, 100, 1.0f);
+        } else if (audioAsset->autoFree) {
+            debug_send("Freeing audio asset after playback\n");
+            FreeAudio(audioAsset);
         }
-        debug_send("Looping audio...\n");
-        PlayAudio(audioAsset, volumePercent, loop, pitch, autoFree);
-    } else if (autoFree) {
-        while (ASND_StatusVoice(audioAsset->voice) != SND_UNUSED) {
-            usleep(1000); // Sleep for a short time to prevent busy waiting
-        }
-        debug_send("Freeing audio asset after playback\n");
-        FreeAudio(audioAsset);
     }
 }
 
@@ -81,5 +93,7 @@ void FreeAudio(AudioAsset *audioAsset) {
     }
     audioAsset->size = 0;
     audioAsset->voice = -1;
+    audioAsset->loop = false;
+    audioAsset->autoFree = false;
     debug_send("Audio asset freed\n");
 }

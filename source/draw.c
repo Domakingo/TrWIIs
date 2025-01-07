@@ -10,6 +10,9 @@
 bool hasVibrated = false;
 int prevHoveredRow = -1;
 int prevHoveredCol = -1;
+bool isAnimating = false;
+clock_t animationStartTime;
+Position winningPositions[3];
 
 void LoadAssets() {
     // Load the images
@@ -52,15 +55,15 @@ void DrawObjects() {
 }
 
 void DrawBoard(char board[3][3]) {
-    Player current = currentPlayer();
+    Player* current = currentPlayer();
 
     // Check if the cursor is within the grid boundaries
-    if (current.ir.sx >= gridStartX && current.ir.sx < gridStartX + gridSize &&
-        current.ir.sy >= gridStartY && current.ir.sy < gridStartY + gridSize) {
+    if (current->ir.sx >= gridStartX && current->ir.sx < gridStartX + gridSize &&
+        current->ir.sy >= gridStartY && current->ir.sy < gridStartY + gridSize) {
         
         // Calculate the hovered column and row based on the cursor position
-        int hoveredCol = (current.ir.sx - gridStartX) / cellSize;
-        int hoveredRow = (current.ir.sy - gridStartY) / cellSize;
+        int hoveredCol = (current->ir.sx - gridStartX) / cellSize;
+        int hoveredRow = (current->ir.sy - gridStartY) / cellSize;
 
         // Check if the hovered cell is empty
         if (board[hoveredRow][hoveredCol] == ' ') {
@@ -69,7 +72,7 @@ void DrawBoard(char board[3][3]) {
 
             // Make the controller vibrate if the hovered cell has changed
             if (hoveredRow != prevHoveredRow || hoveredCol != prevHoveredCol) {
-                ActivateRumble(&current, 1);
+                ActivateRumble(current, 1);
                 prevHoveredRow = hoveredRow;
                 prevHoveredCol = hoveredCol;
             }
@@ -95,8 +98,46 @@ void DrawBoard(char board[3][3]) {
             }
         }
     }
+
+    // If animating, highlight the winning cells
+    if (isAnimating) {
+        HighlightWinningCells(winningPositions);
+    }
 }
 
 void DrawCursor(int x, int y, uint32_t color) {
     GRRLIB_Circle(x, y, 10, color, true);
+}
+
+void HighlightWinningCells(Position winningPositions[3]) {
+    clock_t currentTime = clock();
+    double elapsedSeconds = (double)(currentTime - animationStartTime) / CLOCKS_PER_SEC;
+
+    if (elapsedSeconds > 5.0) {
+        // Stop animation after 5 seconds
+        isAnimating = false;
+        return;
+    }
+
+    // Alternate color every 0.5 seconds
+    uint32_t color = ((int)(elapsedSeconds * 2) % 2 == 0) ? 0xFF0000FF : 0x00000000;
+
+    for (int i = 0; i < 3; i++) {
+        int row = winningPositions[i].row;
+        int col = winningPositions[i].col;
+        GRRLIB_Rectangle(gridStartX + col * cellSize, gridStartY + row * cellSize, cellSize, cellSize, color, true);
+    }
+}
+
+void StartWinningAnimation(Position winningPositions[3]) {
+    isAnimating = true;
+    animationStartTime = clock();
+    for (int i = 0; i < 3; i++) {
+        winningPositions[i] = winningPositions[i];
+    }
+}
+
+void HandleDraw() {
+    // Currently, do nothing for a draw
+    // You can add any draw-specific logic here if needed
 }

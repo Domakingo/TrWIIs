@@ -21,6 +21,10 @@ int main(int argc, char **argv) {
     WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
     WPAD_SetDataFormat(WPAD_CHAN_1, WPAD_FMT_BTNS_ACC_IR);
 
+    // Initialise the audio subsystem
+    ASND_Init();
+    ASND_Pause(0);
+
     // Load the assets
     LoadAssets();
     InitializeAudioAssets();
@@ -32,6 +36,9 @@ int main(int argc, char **argv) {
 
     // Free the assets
     FreeAssets();
+
+    // Close the audio subsystem
+    ASND_End();
 
     // Close the debug network
     debug_close();
