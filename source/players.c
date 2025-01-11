@@ -1,5 +1,8 @@
 #include "headers/players.h"
+#include "headers/debug.h"
 
+#include <stdlib.h>
+#include <ogc/lwp.h>
 #include <unistd.h>
 
 // Define the players
@@ -19,6 +22,10 @@ Player p2 = {
 
 // Return a pointer to the current player
 Player* currentPlayer() {
+    if(p1.myTurn == false && p2.myTurn == false) {
+        return NULL;
+    }
+    
     return (p1.myTurn) ? &p1 : &p2;
 }
 
@@ -27,9 +34,35 @@ Player* waitingPlayer() {
     return (p1.myTurn) ? &p2 : &p1;
 }
 
-// Activate the rumble feature for the specified player
-void ActivateRumble(Player* player, unsigned short millis) {
-    WPAD_Rumble(player->id, 1);
-    usleep(millis * 1000);
-    WPAD_Rumble(player->id, 0);
+typedef struct {
+    Player* player;
+    unsigned short millis;
+} RumbleTaskData;
+
+static void* RumbleTask(void* arg) {
+    RumbleTaskData* data = (RumbleTaskData*)arg;
+    WPAD_Rumble(data->player->id, 1); // Turn on rumble
+
+    usleep(data->millis * 1000);
+
+    WPAD_Rumble(data->player->id, 0);
+
+    free(data);
+    return NULL;
+}
+
+void ActivateRumbleAsync(Player* player, unsigned short millis) {
+    RumbleTaskData* data = (RumbleTaskData*)malloc(sizeof(RumbleTaskData));
+    if (!data) {
+        debug_send("Error: Could not allocate memory for RumbleTaskData\n");
+        return;
+    }
+    data->player = player;
+    data->millis = millis;
+
+    lwp_t thread;
+    if (LWP_CreateThread(&thread, RumbleTask, data, NULL, 0, 80) != 0) {
+        debug_send("Error: Could not create rumble thread\n");
+        free(data);
+    }
 }

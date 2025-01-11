@@ -2,37 +2,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ogc/lwp.h>
 
 #include "headers/audio.h"
 #include "headers/debug.h"
-
-// Audio assets
 #include "headers/assets/audio/placeMark_wav.h"
 
-// Declare the AudioAsset
 AudioAsset placeSound;
 
 void InitializeAudioAssets() {
-    // Initialize the AudioAsset
     placeSound = CreateAudioAsset(placeMark_wav, placeMark_wav_size);
+    placeSound.autoFree = true;
 }
 
 AudioAsset CreateAudioAsset(const uint8_t *buffer, uint32_t size) {
     if (!buffer || size == 0) {
         debug_send("Invalid buffer or size in CreateAudioAsset\n");
-        AudioAsset audioAsset = { NULL, 0, -1, false, false };
-        return audioAsset;
+        return (AudioAsset){NULL, 0, -1, false, false};
     }
     
     debug_send("Creating audio asset...\n");
-    AudioAsset audioAsset;
-    audioAsset.buffer = (uint8_t *)buffer;
-    audioAsset.size = size;
-    audioAsset.voice = -1; // Initialize voice to -1 indicating no voice assigned yet
-    audioAsset.loop = false;
-    audioAsset.autoFree = false;
+    AudioAsset audioAsset = {
+        .buffer = (uint8_t *)buffer,
+        .size = size,
+        .voice = -1,
+        .loop = false,
+        .autoFree = false
+    };
     debug_send("Audio asset created with size: %u\n", size);
     return audioAsset;
+}
+
+typedef struct {
+    AudioAsset *audioAsset;
+    int volume;
+    float pitch;
+} AudioTaskData;
+
+static void* AudioTask(void* arg) {
+    AudioTaskData* data = (AudioTaskData*)arg;
+    AudioAsset *audioAsset = data->audioAsset;
+    
+    audioAsset->voice = ASND_GetFirstUnusedVoice();
+    if (audioAsset->voice < 0) {
+        debug_send("No available voice for audio playback\n");
+        free(data);
+        return NULL;
+    }
+
+    ASND_SetVoice(audioAsset->voice, VOICE_STEREO_8BIT, 48000 * data->pitch, 0, 
+                  audioAsset->buffer, audioAsset->size, data->volume, data->volume, NULL);
+    debug_send("Audio playback started with volume: %d on voice: %d\n", 
+                data->volume, audioAsset->voice);
+
+    free(data);
+    return NULL;
 }
 
 void PlayAudioAsync(AudioAsset *audioAsset, int volumePercent, float pitch) {
@@ -51,14 +75,21 @@ void PlayAudioAsync(AudioAsset *audioAsset, int volumePercent, float pitch) {
 
     debug_send("Playing audio asynchronously...\n");
     int volume = (volumePercent * 255) / 100;
-    audioAsset->voice = ASND_GetFirstUnusedVoice();
-    if (audioAsset->voice < 0) {
-        debug_send("No available voice for audio playback\n");
+
+    AudioTaskData* data = (AudioTaskData*)malloc(sizeof(AudioTaskData));
+    if (!data) {
+        debug_send("Error: Could not allocate memory for AudioTaskData\n");
         return;
     }
+    data->audioAsset = audioAsset;
+    data->volume = volume;
+    data->pitch = pitch;
 
-    ASND_SetVoice(audioAsset->voice, VOICE_STEREO_8BIT, 48000 * pitch, 0, audioAsset->buffer, audioAsset->size, volume, volume, NULL);
-    debug_send("Audio playback started with volume: %d on voice: %d\n", volume, audioAsset->voice);
+    lwp_t thread;
+    if (LWP_CreateThread(&thread, AudioTask, data, NULL, 0, 80) != 0) {
+        debug_send("Error: Could not create audio thread\n");
+        free(data);
+    }
 }
 
 void UpdateAudioLoop(AudioAsset *audioAsset) {
@@ -66,8 +97,7 @@ void UpdateAudioLoop(AudioAsset *audioAsset) {
         return;
     }
 
-    int status = ASND_StatusVoice(audioAsset->voice);
-    if (status == SND_UNUSED) {
+    if (ASND_StatusVoice(audioAsset->voice) == SND_UNUSED) {
         if (audioAsset->loop) {
             debug_send("Restarting looped audio...\n");
             PlayAudioAsync(audioAsset, 100, 1.0f);

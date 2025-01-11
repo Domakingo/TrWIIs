@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef struct {
+typedef struct Player {
     unsigned short id;
     ir_t ir;
     char mark;
@@ -18,6 +18,6 @@ extern Player p2;
 
 Player* currentPlayer();
 Player* waitingPlayer();
-void ActivateRumble(Player* player, unsigned short millis);
+void ActivateRumbleAsync(Player* player, unsigned short millis);
 
 #endif

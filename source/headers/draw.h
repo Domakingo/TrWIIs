@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <time.h>
+#include <ogc/lwp.h> // Include lwp.h per la gestione dei thread
 
 #include "types.h"
 
@@ -11,18 +11,18 @@ extern bool hasVibrated;
 extern int prevHoveredRow;
 extern int prevHoveredCol;
 extern bool isAnimating;
-extern clock_t animationStartTime;
+extern lwp_t animationThread;
+extern Position winningPositions[3];
 
 void LoadAssets();
 void FreeAssets();
-
 void DrawObjects();
-
 void DrawBoard(char board[3][3]);
 void DrawCursor(int x, int y, uint32_t color);
-
 void HighlightWinningCells(Position winningPositions[3]);
 void StartWinningAnimation(Position winningPositions[3]);
+void StartDrawAnimation();
+void ResetBoard();
 void HandleDraw();
 
 #endif

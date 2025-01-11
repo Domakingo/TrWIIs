@@ -5,9 +5,6 @@
 
 #include "types.h"
 
-extern Position winningPositions[3];
-
 void GameLoop();
-void GameEnded(bool isDraw);
 
 #endif

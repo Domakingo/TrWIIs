@@ -4,7 +4,8 @@
 #include "players.h"
 #include "types.h"
 
-void UpdateObjects();
+extern Position winningPositions[3];
+
 void PlaceMark(int row, int col);
 bool CheckWinCondition(Player* player, Position winningPositions[3]);
 

@@ -3,10 +3,7 @@
 #include "headers/audio.h"
 #include "headers/engine.h"
 #include "headers/debug.h"
-
-void UpdateObjects() {
-    // Controlla le condizioni di vittoria o pareggio
-}
+#include "headers/draw.h"
 
 void PlaceMark(int row, int col) {
     Player* current = currentPlayer();
@@ -17,10 +14,15 @@ void PlaceMark(int row, int col) {
 
         PlayAudioAsync(&placeSound, 100, 1.0f);
 
-        if(CheckWinCondition(current, winningPositions)) {
-            ActivateRumble(current, 1000);
-            ActivateRumble(waiting, 1000);
-            GameEnded(false);
+        bool gameEnded = false;
+
+        if (CheckWinCondition(current, winningPositions)) {
+            gameEnded = true;
+            current->myTurn = false;
+            waiting->myTurn = false;
+            ActivateRumbleAsync(current, 2000);
+            ActivateRumbleAsync(waiting, 2000);
+            StartWinningAnimation(winningPositions);
         } else {
             bool isDraw = true;
             for (int i = 0; i < 3; i++) {
@@ -33,12 +35,19 @@ void PlaceMark(int row, int col) {
             }
 
             if (isDraw) {
-                GameEnded(true);
+                gameEnded = true;
+                current->myTurn = false;
+                waiting->myTurn = false;
+                ActivateRumbleAsync(current, 2000);
+                ActivateRumbleAsync(waiting, 2000);
+                StartDrawAnimation();
             }
         }
-           
-        current->myTurn = false;
-        waiting->myTurn = true;
+
+        if (!gameEnded) {
+            current->myTurn = false;
+            waiting->myTurn = true;
+        }
     }
 }
 

@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// Audio assets
 typedef struct {
     uint8_t *buffer;
     uint32_t size;
@@ -17,12 +16,11 @@ typedef struct {
 
 extern AudioAsset placeSound;
 
-// Function declarations
-void FreeAudio(AudioAsset *audioAsset);
 void InitializeAudioAssets();
 AudioAsset CreateAudioAsset(const uint8_t *buffer, uint32_t size);
 void PlayAudioAsync(AudioAsset *audioAsset, int volumePercent, float pitch);
 void UpdateAudioLoop(AudioAsset *audioAsset);
 void StopAudio(const AudioAsset *audioAsset);
+void FreeAudio(AudioAsset *audioAsset);
 
 #endif
