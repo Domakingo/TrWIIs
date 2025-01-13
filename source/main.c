@@ -1,10 +1,11 @@
 #include <grrlib.h>
 #include <stdlib.h>
 #include <wiiuse/wpad.h>
+#include <unistd.h>
 
-#include "headers/engine.h"
 #include "headers/draw.h"
 #include "headers/audio.h"
+#include "headers/input.h"
 #include "headers/debug.h"
 
 int main(int argc, char **argv) {
@@ -29,7 +30,13 @@ int main(int argc, char **argv) {
     LoadAssets();
     InitializeAudioAssets();
 
-    GameLoop(); // Start the game loop
+    while (true) {
+        HandleInput();
+
+        DrawObjects();
+
+        usleep(16000);
+    }
 
     // Clear the memory allocated by GRRLIB
     GRRLIB_Exit();

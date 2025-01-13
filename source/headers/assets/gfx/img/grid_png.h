@@ -6,7 +6,7 @@
 extern const uint8_t grid_png[];
 extern const uint8_t grid_png_end[];
 #if __cplusplus >= 201103L
-static constexpr size_t grid_png_size=132851;
+static constexpr size_t grid_png_size=94880;
 #else
-static const size_t grid_png_size=132851;
+static const size_t grid_png_size=94880;
 #endif

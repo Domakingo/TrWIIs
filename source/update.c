@@ -1,9 +1,21 @@
 #include "headers/update.h"
 #include "headers/globals.h"
 #include "headers/audio.h"
-#include "headers/engine.h"
 #include "headers/debug.h"
 #include "headers/draw.h"
+
+#include <ogc/lwp.h>
+#include <unistd.h>
+
+// Function to clear the winningPositions array after a delay
+void* ClearWinningPositions(void* arg) {
+    usleep(2000000); // Sleep for 2 seconds
+
+    highlightWinningCells = false;
+    ResetBoard();
+
+    return NULL;
+}
 
 void PlaceMark(int row, int col) {
     Player* current = currentPlayer();
@@ -12,17 +24,19 @@ void PlaceMark(int row, int col) {
     if (board[row][col] == ' ') {
         board[row][col] = current->mark;
 
-        PlayAudioAsync(&placeSound, 100, 1.0f);
-
-        bool gameEnded = false;
+        PlayAudioAsync(&placeSound, 50, 1.0f);
 
         if (CheckWinCondition(current, winningPositions)) {
-            gameEnded = true;
-            current->myTurn = false;
-            waiting->myTurn = false;
+            getPlayer(0)->myTurn = false;
+            getPlayer(1)->myTurn = false;
+
+            highlightWinningCells = true;
+
             ActivateRumbleAsync(current, 2000);
-            ActivateRumbleAsync(waiting, 2000);
-            StartWinningAnimation(winningPositions);
+
+            // Create a thread to clear the winningPositions after a delay
+            lwp_t clearThread;
+            LWP_CreateThread(&clearThread, ClearWinningPositions, winningPositions, NULL, 0, 80);
         } else {
             bool isDraw = true;
             for (int i = 0; i < 3; i++) {
@@ -35,19 +49,17 @@ void PlaceMark(int row, int col) {
             }
 
             if (isDraw) {
-                gameEnded = true;
-                current->myTurn = false;
-                waiting->myTurn = false;
+                getPlayer(0)->myTurn = false;
+                getPlayer(1)->myTurn = false;
                 ActivateRumbleAsync(current, 2000);
                 ActivateRumbleAsync(waiting, 2000);
-                StartDrawAnimation();
             }
         }
+    }
 
-        if (!gameEnded) {
-            current->myTurn = false;
-            waiting->myTurn = true;
-        }
+    if (!highlightWinningCells) {
+        current->myTurn = false;
+        waiting->myTurn = true;
     }
 }
 

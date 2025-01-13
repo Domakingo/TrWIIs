@@ -34,6 +34,14 @@ Player* waitingPlayer() {
     return (p1.myTurn) ? &p2 : &p1;
 }
 
+Player* getPlayer(int id) {
+    if (id == 0) {
+        return &p1;
+    }
+
+    return &p2;
+}
+
 typedef struct {
     Player* player;
     unsigned short millis;

@@ -18,6 +18,7 @@ extern Player p2;
 
 Player* currentPlayer();
 Player* waitingPlayer();
+Player* getPlayer(int id);
 void ActivateRumbleAsync(Player* player, unsigned short millis);
 
 #endif
