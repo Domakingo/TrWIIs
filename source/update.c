@@ -24,7 +24,16 @@ void PlaceMark(int row, int col) {
     if (board[row][col] == ' ') {
         board[row][col] = current->mark;
 
-        PlayAudioAsync(&placeSound, 50, 1.0f);
+        if (current->id == 0) {
+            PlayAudioAsync(&placeMarkSoundP1, 100, 1.0f);
+        } else {
+            PlayAudioAsync(&placeMarkSoundP2, 100, 1.0f);
+        }
+
+        if (!highlightWinningCells) {
+            current->myTurn = false;
+            waiting->myTurn = true;
+        }
 
         if (CheckWinCondition(current, winningPositions)) {
             getPlayer(0)->myTurn = false;
@@ -55,11 +64,6 @@ void PlaceMark(int row, int col) {
                 ActivateRumbleAsync(waiting, 2000);
             }
         }
-    }
-
-    if (!highlightWinningCells) {
-        current->myTurn = false;
-        waiting->myTurn = true;
     }
 }
 
@@ -101,3 +105,4 @@ bool CheckWinCondition(Player* player, Position winningPositions[3]) {
 
     return false;
 }
+

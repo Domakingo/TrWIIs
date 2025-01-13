@@ -6,13 +6,17 @@
 
 #include "headers/audio.h"
 #include "headers/debug.h"
-#include "headers/assets/audio/placeMark_wav.h"
+#include "headers/assets/audio/placeMarkP1_wav.h"
+#include "headers/assets/audio/placeMarkP2_wav.h"
 
-AudioAsset placeSound;
+AudioAsset placeMarkSoundP1, placeMarkSoundP2;
 
 void InitializeAudioAssets() {
-    placeSound = CreateAudioAsset(placeMark_wav, placeMark_wav_size);
-    placeSound.autoFree = true;
+    placeMarkSoundP1 = CreateAudioAsset(placeMarkP1_wav, placeMarkP1_wav_size);
+    placeMarkSoundP1.autoFree = true;
+
+    placeMarkSoundP2 = CreateAudioAsset(placeMarkP2_wav, placeMarkP2_wav_size);
+    placeMarkSoundP2.autoFree = true;
 }
 
 AudioAsset CreateAudioAsset(const uint8_t *buffer, uint32_t size) {
@@ -50,7 +54,7 @@ static void* AudioTask(void* arg) {
         return NULL;
     }
 
-    ASND_SetVoice(audioAsset->voice, VOICE_STEREO_8BIT, 48000 * data->pitch, 0, 
+    ASND_SetVoice(audioAsset->voice, VOICE_STEREO_16BIT, 48000 * data->pitch, 0, 
                   audioAsset->buffer, audioAsset->size, data->volume, data->volume, NULL);
     debug_send("Audio playback started with volume: %d on voice: %d\n", 
                 data->volume, audioAsset->voice);

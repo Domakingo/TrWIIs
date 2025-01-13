@@ -63,7 +63,7 @@ void DrawBoard(char board[3][3]) {
             // Calculate the hovered column and row based on the cursor position
             int hoveredCol = (current->ir.sx - gridStartX) / cellSize;
             int hoveredRow = (current->ir.sy - gridStartY) / cellSize;
-    
+
             // Check if the hovered cell is empty
             if (board[hoveredRow][hoveredCol] == ' ') {
                 // Draw the hovered cell with the specified color
@@ -99,7 +99,7 @@ void DrawCursor(int x, int y, uint32_t color) {
 
 void DrawWinningCells() {
     for (int i = 0; i < 3; i++) {
-        GRRLIB_Rectangle(gridStartX + winningPositions[i].col * cellSize, gridStartY + winningPositions[i].row * cellSize, cellSize, cellSize, 0x2CE8F5AA, true);
+        GRRLIB_Rectangle(gridStartX + winningPositions[i].col * cellSize, gridStartY + winningPositions[i].row * cellSize, cellSize, cellSize, 0xB8FCE2AA, true);
     }
 }
 

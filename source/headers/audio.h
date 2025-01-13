@@ -14,7 +14,7 @@ typedef struct {
     bool autoFree;
 } AudioAsset;
 
-extern AudioAsset placeSound;
+extern AudioAsset placeMarkSoundP1, placeMarkSoundP2;
 
 void InitializeAudioAssets();
 AudioAsset CreateAudioAsset(const uint8_t *buffer, uint32_t size);
