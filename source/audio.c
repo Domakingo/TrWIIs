@@ -3,38 +3,41 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <ogc/lwp.h>
+#include <string.h>
 
 #include "headers/audio.h"
 #include "headers/debug.h"
-#include "headers/assets/audio/placeMarkP1_wav.h"
-#include "headers/assets/audio/placeMarkP2_wav.h"
+
+#include "headers/assets/audio/placeMarkP1.h"
+#include "headers/assets/audio/placeMarkP2.h"
 
 AudioAsset placeMarkSoundP1, placeMarkSoundP2;
 
 void InitializeAudioAssets() {
-    placeMarkSoundP1 = CreateAudioAsset(placeMarkP1_wav, placeMarkP1_wav_size);
+    if (!fatInitDefault()) {
+        debug_send("Failed to initialize FAT filesystem\n");
+        return;
+    }
+
+    placeMarkSoundP1 = CreateAudioAssetFromRaw(placeMarkP1, placeMarkP1_size);
     placeMarkSoundP1.autoFree = true;
 
-    placeMarkSoundP2 = CreateAudioAsset(placeMarkP2_wav, placeMarkP2_wav_size);
+    placeMarkSoundP2 = CreateAudioAssetFromRaw(placeMarkP2, placeMarkP2_size);
     placeMarkSoundP2.autoFree = true;
 }
 
-AudioAsset CreateAudioAsset(const uint8_t *buffer, uint32_t size) {
-    if (!buffer || size == 0) {
-        debug_send("Invalid buffer or size in CreateAudioAsset\n");
+
+AudioAsset CreateAudioAssetFromRaw(const unsigned char *rawData, int size) {
+    uint8_t *buffer = (uint8_t *)malloc(size);
+    if (!buffer) {
+        debug_send("Failed to allocate memory for audio buffer\n");
         return (AudioAsset){NULL, 0, -1, false, false};
     }
-    
-    debug_send("Creating audio asset...\n");
-    AudioAsset audioAsset = {
-        .buffer = (uint8_t *)buffer,
-        .size = size,
-        .voice = -1,
-        .loop = false,
-        .autoFree = false
-    };
-    debug_send("Audio asset created with size: %u\n", size);
-    return audioAsset;
+
+    memcpy(buffer, rawData, size);
+
+    debug_send("Audio asset created with size: %d\n", size);
+    return (AudioAsset){buffer, size, -1, false, false};
 }
 
 typedef struct {
@@ -54,7 +57,7 @@ static void* AudioTask(void* arg) {
         return NULL;
     }
 
-    ASND_SetVoice(audioAsset->voice, VOICE_STEREO_16BIT, 48000 * data->pitch, 0, 
+    ASND_SetVoice(audioAsset->voice, VOICE_MONO_16BIT, 48000 * data->pitch, 0, 
                   audioAsset->buffer, audioAsset->size, data->volume, data->volume, NULL);
     debug_send("Audio playback started with volume: %d on voice: %d\n", 
                 data->volume, audioAsset->voice);
@@ -131,4 +134,3 @@ void FreeAudio(AudioAsset *audioAsset) {
     audioAsset->autoFree = false;
     debug_send("Audio asset freed\n");
 }
-

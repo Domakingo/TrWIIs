@@ -403,3 +403,5 @@ FodyWeavers.xsd
 *.dol
 *.elf
 build/
+
+more/

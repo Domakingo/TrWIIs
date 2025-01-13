@@ -17,7 +17,7 @@ typedef struct {
 extern AudioAsset placeMarkSoundP1, placeMarkSoundP2;
 
 void InitializeAudioAssets();
-AudioAsset CreateAudioAsset(const uint8_t *buffer, uint32_t size);
+AudioAsset CreateAudioAssetFromRaw(const unsigned char *rawData, int size);
 void PlayAudioAsync(AudioAsset *audioAsset, int volumePercent, float pitch);
 void UpdateAudioLoop(AudioAsset *audioAsset);
 void StopAudio(const AudioAsset *audioAsset);
