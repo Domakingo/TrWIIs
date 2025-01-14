@@ -3,7 +3,7 @@
 
 #include "headers/input.h"
 #include "headers/globals.h"
-#include "headers/players.h"
+#include "headers/player.h"
 #include "headers/update.h"
 #include "headers/debug.h"
 
@@ -34,13 +34,13 @@ void HandleInput() {
         if (WPAD_ButtonsDown(current->id) & WPAD_BUTTON_A) {
             // Calculate the grid index based on the cursor position
             int col = (current->ir.sx - gridStartX) / cellSize;
-            int row = (current->ir.sy - gridStartY) / cellSize;
+            int row = (current->ir.sy - 34 - gridStartY) / cellSize;
 
             // Ensure the calculated position is within grid bounds
             if (row >= 0 && row < 3 && col >= 0 && col < 3) {
                 // Ensure the cursor is within the grid area
                 if (current->ir.sx >= gridStartX && current->ir.sx < gridStartX + gridSize &&
-                    current->ir.sy >= gridStartY && current->ir.sy < gridStartY + gridSize) {
+                    current->ir.sy - 34 >= gridStartY && current->ir.sy - 34 < gridStartY + gridSize) {
                     PlaceMark(row, col);
                 }
             }

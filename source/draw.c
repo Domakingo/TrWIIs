@@ -1,9 +1,10 @@
 #include <grrlib.h>
 #include <wiiuse/wpad.h>
 #include <unistd.h>
+#include <math.h>
 
 #include "headers/draw.h"
-#include "headers/players.h"
+#include "headers/player.h"
 #include "headers/assets.h"
 #include "headers/globals.h"
 #include "headers/debug.h"
@@ -23,12 +24,35 @@ void LoadAssets() {
     if (gridTex == NULL) {
         debug_send("Failed to load grid.png\n");
     }
+
+    XTex = GRRLIB_LoadTexture(X_png);
+    if (XTex == NULL) {
+        debug_send("Failed to load XTex.png\n");
+    }
+
+    OTex = GRRLIB_LoadTexture(O_png);
+    if (OTex == NULL) {
+        debug_send("Failed to load OTex.png\n");
+    }
+
+    p1CursorTex = GRRLIB_LoadTexture(p1Cursor_png);
+    if (p1CursorTex == NULL) {
+        debug_send("Failed to load p1CursorTex.png\n");
+    }
+
+    p2CursorTex = GRRLIB_LoadTexture(p2Cursor_png);
+    if (p2CursorTex == NULL) {
+        debug_send("Failed to load p2CursorTex.png\n");
+    }
 }
 
 void FreeAssets() {
-    // Free the textures
     GRRLIB_FreeTexture(backgroundTex);
     GRRLIB_FreeTexture(gridTex);
+    GRRLIB_FreeTexture(XTex);
+    GRRLIB_FreeTexture(OTex);
+    GRRLIB_FreeTexture(p1CursorTex);
+    GRRLIB_FreeTexture(p2CursorTex);
 }
 
 void DrawObjects() {
@@ -44,9 +68,9 @@ void DrawObjects() {
     // Draw the Tic-Tac-Toe board
     DrawBoard(board);
 
-    // Draw the cursor
-    DrawCursor(p1.ir.sx, p1.ir.sy, p1.color);
-    DrawCursor(p2.ir.sx, p2.ir.sy, p2.color);
+    // Draw the cursors
+    DrawCursor(p1.ir.sx, p1.ir.sy, &p1, p1CursorTex);
+    DrawCursor(p2.ir.sx, p2.ir.sy, &p2, p2CursorTex);
 
     // Render the frame buffer to the TV
     GRRLIB_Render();
@@ -58,11 +82,11 @@ void DrawBoard(char board[3][3]) {
     if (current != NULL) {
         // Check if the cursor is within the grid boundaries
         if (current->ir.sx >= gridStartX && current->ir.sx < gridStartX + gridSize &&
-            current->ir.sy >= gridStartY && current->ir.sy < gridStartY + gridSize) {
+            current->ir.sy - 34 >= gridStartY && current->ir.sy - 34 < gridStartY + gridSize) {
             
             // Calculate the hovered column and row based on the cursor position
             int hoveredCol = (current->ir.sx - gridStartX) / cellSize;
-            int hoveredRow = (current->ir.sy - gridStartY) / cellSize;
+            int hoveredRow = (current->ir.sy - 34 - gridStartY) / cellSize;
 
             // Check if the hovered cell is empty
             if (board[hoveredRow][hoveredCol] == ' ') {
@@ -76,25 +100,31 @@ void DrawBoard(char board[3][3]) {
         DrawWinningCells();
     }
 
-    // Draw the marks on the board
+    // Draw the marks on the board using textures
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
+            int x = gridStartX + j * cellSize + (cellSize - 100) / 2; // Center the texture horizontally
+            int y = gridStartY + i * cellSize + (cellSize - 100) / 2; // Center the texture vertically
+
             if (board[i][j] == 'X') {
-                for (int t = 0; t < marksThickness; t++) {
-                    GRRLIB_Line(gridStartX + cellSize * j + t, gridStartY + cellSize * i, gridStartX + cellSize * (j + 1) + t, gridStartY + cellSize * (i + 1), p1.color);
-                    GRRLIB_Line(gridStartX + cellSize * (j + 1) + t, gridStartY + cellSize * i, gridStartX + cellSize * j + t, gridStartY + cellSize * (i + 1), p1.color);
-                }
+                GRRLIB_DrawImg(x, y, XTex, 0, 1, 1, 0xFFFFFFFF); // Draw the X texture
             } else if (board[i][j] == 'O') {
-                for (int t = 0; t < marksThickness; t++) {
-                    GRRLIB_Circle(gridStartX + cellSize * j + cellSize / 2, gridStartY + cellSize * i + cellSize / 2, (cellSize / 2) - t, p2.color, false);
-                }
+                GRRLIB_DrawImg(x, y, OTex, 0, 1, 1, 0xFFFFFFFF); // Draw the O texture
             }
         }
     }
 }
 
-void DrawCursor(int x, int y, uint32_t color) {
-    GRRLIB_Circle(x, y, 10, color, true);
+void DrawCursor(int x, int y, Player* player, GRRLIB_texImg* cursorTex) {
+    WPADData* data = WPAD_Data(player->id);
+    float angle = data->orient.roll;
+
+    // Calculate the position to draw the image such that its center is at (x, y)
+    int drawX = x - cursorTex->w / 2;
+    int drawY = y - cursorTex->h / 2;
+
+    // Draw the cursor image with rotation around its center
+    GRRLIB_DrawImg(drawX, drawY, cursorTex, angle, 1, 1, 0xFFFFFFFF);
 }
 
 void DrawWinningCells() {

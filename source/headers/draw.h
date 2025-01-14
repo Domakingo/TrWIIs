@@ -13,7 +13,7 @@ void LoadAssets();
 void FreeAssets();
 void DrawObjects();
 void DrawBoard(char board[3][3]);
-void DrawCursor(int x, int y, uint32_t color);
+void DrawCursor(int x, int y, Player* player, GRRLIB_texImg* cursorTex);
 void DrawWinningCells();
 void ResetBoard();
 void HandleDraw();

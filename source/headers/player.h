@@ -1,17 +1,10 @@
 #ifndef PLAYERS_H
 #define PLAYERS_H
 
-#include <wiiuse/wpad.h>
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef struct Player {
-    unsigned short id;
-    ir_t ir;
-    char mark;
-    uint32_t color;
-    bool myTurn;
-} Player;
+#include "types.h"
 
 extern Player p1;
 extern Player p2;

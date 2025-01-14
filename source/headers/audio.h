@@ -6,15 +6,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct {
-    uint8_t *buffer;
-    uint32_t size;
-    int voice;
-    bool loop;
-    bool autoFree;
-} AudioAsset;
-
-extern AudioAsset placeMarkSoundP1, placeMarkSoundP2;
+#include "types.h"
 
 void InitializeAudioAssets();
 AudioAsset CreateAudioAssetFromRaw(const unsigned char *rawData, int size);

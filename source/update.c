@@ -1,5 +1,6 @@
 #include "headers/update.h"
 #include "headers/globals.h"
+#include "headers/assets.h"
 #include "headers/audio.h"
 #include "headers/debug.h"
 #include "headers/draw.h"

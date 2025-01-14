@@ -1,7 +1,7 @@
 #ifndef UPDATE_H
 #define UPDATE_H
 
-#include "players.h"
+#include "player.h"
 #include "types.h"
 
 void PlaceMark(int row, int col);

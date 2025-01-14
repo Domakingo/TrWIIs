@@ -6,12 +6,8 @@
 #include <string.h>
 
 #include "headers/audio.h"
+#include "headers/assets.h"
 #include "headers/debug.h"
-
-#include "headers/assets/audio/placeMarkP1.h"
-#include "headers/assets/audio/placeMarkP2.h"
-
-AudioAsset placeMarkSoundP1, placeMarkSoundP2;
 
 void InitializeAudioAssets() {
     if (!fatInitDefault()) {
@@ -29,10 +25,6 @@ void InitializeAudioAssets() {
 
 AudioAsset CreateAudioAssetFromRaw(const unsigned char *rawData, int size) {
     uint8_t *buffer = (uint8_t *)malloc(size);
-    if (!buffer) {
-        debug_send("Failed to allocate memory for audio buffer\n");
-        return (AudioAsset){NULL, 0, -1, false, false};
-    }
 
     memcpy(buffer, rawData, size);
 
