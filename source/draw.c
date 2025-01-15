@@ -306,8 +306,10 @@ void* InputCountingThread(void* arg) {
 void* ButtonPressChallenge(void* arg) {
     inputThreadRunning = true;
 
-    debug_send("starting in 3 sec...");
     usleep(3000000);
+
+    ResetBoard();
+    return NULL;
 
     // Create the input counting thread
     lwp_t inputThread;
