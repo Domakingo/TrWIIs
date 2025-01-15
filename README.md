@@ -1,4 +1,4 @@
-# trWIIs 🎮
+# TrWIIs 🎮
 
 Welcome to **trWIIs**, a fun and nostalgic version of the classic Tic-Tac-Toe game designed for the Nintendo Wii! This project is my first serious endeavor in C, developed with passion and determination using **devkitPro**. 
 
