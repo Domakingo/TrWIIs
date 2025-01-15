@@ -22,7 +22,6 @@ extern const int cellSize;
 extern const unsigned short boardThickness;
 extern const unsigned short marksThickness;
 
-
-// Functions
+extern int playedGames;
 
 #endif

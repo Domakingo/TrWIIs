@@ -34,9 +34,14 @@ void PlaceMark(int row, int col) {
         if (!highlightWinningCells) {
             current->myTurn = false;
             waiting->myTurn = true;
+
+            current->cursorStatus = 0;
         }
 
         if (CheckWinCondition(current, winningPositions)) {
+            current->cursorStatus = 2;
+            waiting->cursorStatus = 0;
+
             getPlayer(0)->myTurn = false;
             getPlayer(1)->myTurn = false;
 
@@ -59,10 +64,15 @@ void PlaceMark(int row, int col) {
             }
 
             if (isDraw) {
+                getPlayer(0)->cursorStatus = 3;
+                getPlayer(1)->cursorStatus = 3;
+
                 getPlayer(0)->myTurn = false;
                 getPlayer(1)->myTurn = false;
                 ActivateRumbleAsync(current, 2000);
                 ActivateRumbleAsync(waiting, 2000);
+
+                HandleDraw();
             }
         }
     }

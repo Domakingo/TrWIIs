@@ -20,8 +20,16 @@ typedef struct Player {
     unsigned short id;
     ir_t ir;
     char mark;
-    uint32_t color;
     bool myTurn;
+    int cursorStatus;
+    int health;
+    int hitHeight;
+    int hitWidth;
 } Player;
+
+typedef struct {
+    int p1PressCount;
+    int p2PressCount;
+} PressCounts;
 
 #endif

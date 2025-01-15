@@ -19,5 +19,4 @@ const int cellSize = 100;
 const unsigned short boardThickness = 3;
 const unsigned short marksThickness = 5;
 
-
-// Functions
+int playedGames = 0;

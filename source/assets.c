@@ -6,8 +6,12 @@ GRRLIB_texImg *backgroundTex = NULL;
 GRRLIB_texImg *gridTex = NULL;
 GRRLIB_texImg *XTex = NULL;
 GRRLIB_texImg *OTex = NULL;
-GRRLIB_texImg *p1CursorTex = NULL;
-GRRLIB_texImg *p2CursorTex = NULL;
+
+GRRLIB_texImg *p1CursorTex[4] = {NULL, NULL, NULL, NULL};
+GRRLIB_texImg *p2CursorTex[4] = {NULL, NULL, NULL, NULL};
+
+GRRLIB_texImg *numbers_0to4[5] = {NULL, NULL, NULL, NULL, NULL};
+GRRLIB_texImg *numbers_5to9[5] = {NULL, NULL, NULL, NULL, NULL};
 
 // Audio
 AudioAsset placeMarkSoundP1 = (AudioAsset){NULL, 0, -1, false, false};

@@ -9,6 +9,8 @@
 extern Player p1;
 extern Player p2;
 
+extern PressCounts drawABcounts;
+
 Player* currentPlayer();
 Player* waitingPlayer();
 Player* getPlayer(int id);

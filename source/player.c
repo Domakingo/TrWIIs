@@ -9,16 +9,24 @@
 Player p1 = {
     .id = 0,
     .mark = 'X',
-    .color = 0x2CE8F5FF,
-    .myTurn = true
+    .myTurn = true,
+    .cursorStatus = 0,
+    .health = 100,
+    .hitHeight = 64,
+    .hitWidth = 64
 };
 
 Player p2 = {
     .id = 1,
     .mark = 'O',
-    .color = 0xFF0044FF,
-    .myTurn = false
+    .myTurn = false,
+    .cursorStatus = 0,
+    .health = 100,
+    .hitHeight = 64,
+    .hitWidth = 64
 };
+
+PressCounts drawABcounts = {0, 0};
 
 // Return a pointer to the current player
 Player* currentPlayer() {
