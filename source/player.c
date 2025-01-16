@@ -11,9 +11,6 @@ Player p1 = {
     .mark = 'X',
     .myTurn = true,
     .cursorStatus = 0,
-    .health = 100,
-    .hitHeight = 64,
-    .hitWidth = 64
 };
 
 Player p2 = {
@@ -21,12 +18,7 @@ Player p2 = {
     .mark = 'O',
     .myTurn = false,
     .cursorStatus = 0,
-    .health = 100,
-    .hitHeight = 64,
-    .hitWidth = 64
 };
-
-PressCounts drawABcounts = {0, 0};
 
 // Return a pointer to the current player
 Player* currentPlayer() {

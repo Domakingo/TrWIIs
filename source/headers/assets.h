@@ -20,9 +20,6 @@
 #include "assets/gfx/img/p2/p2Select_png.h"
 #include "assets/gfx/img/p2/p2Win_png.h"
 
-#include "assets/gfx/img/numbers_0to4_png.h"
-#include "assets/gfx/img/numbers_5to9_png.h"
-
 #include "assets/audio/placeMarkP1.h"
 #include "assets/audio/placeMarkP2.h"
 
@@ -34,9 +31,6 @@ extern GRRLIB_texImg *XTex;
 extern GRRLIB_texImg *OTex;
 extern GRRLIB_texImg *p1CursorTex[4];
 extern GRRLIB_texImg *p2CursorTex[4];
-
-extern GRRLIB_texImg *numbers_0to4[5];
-extern GRRLIB_texImg *numbers_5to9[5];
 
 // Audio
 extern AudioAsset placeMarkSoundP1;

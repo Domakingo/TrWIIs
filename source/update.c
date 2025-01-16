@@ -72,7 +72,8 @@ void PlaceMark(int row, int col) {
                 ActivateRumbleAsync(current, 2000);
                 ActivateRumbleAsync(waiting, 2000);
 
-                HandleDraw();
+                lwp_t clearThread;
+                LWP_CreateThread(&clearThread, ClearWinningPositions, winningPositions, NULL, 0, 80);
             }
         }
     }

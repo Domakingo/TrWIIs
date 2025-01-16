@@ -27,9 +27,4 @@ typedef struct Player {
     int hitWidth;
 } Player;
 
-typedef struct {
-    int p1PressCount;
-    int p2PressCount;
-} PressCounts;
-
 #endif
