@@ -14,33 +14,67 @@ Position winningPositions[3];
 bool highlightWinningCells = false;
 
 void LoadAssets() {
-    typedef struct {
-        GRRLIB_texImg **texture;
-        const char *filename;
-    } Asset;
+    // Load the images
+    backgroundTex = GRRLIB_LoadTexture(background_png);
+    if (backgroundTex == NULL) {
+        debug_send("Failed to load background.png\n");
+    }
+    
+    gridTex = GRRLIB_LoadTexture(grid_png);
+    if (gridTex == NULL) {
+        debug_send("Failed to load grid.png\n");
+    }
 
-    Asset assets[] = {
-        {&backgroundTex, "background_png"},
-        {&gridTex, "grid_png"},
-        {&XTex, "X_png"},
-        {&OTex, "O_png"},
-        {&p1CursorTex[0], "p1Move_png"},
-        {&p1CursorTex[1], "p1Select_png"},
-        {&p1CursorTex[2], "p1Win_png"},
-        {&p1CursorTex[3], "p1Draw_png"},
-        {&p2CursorTex[0], "p2Move_png"},
-        {&p2CursorTex[1], "p2Select_png"},
-        {&p2CursorTex[2], "p2Win_png"},
-        {&p2CursorTex[3], "p2Draw_png"},
-    };
+    XTex = GRRLIB_LoadTexture(X_png);
+    if (XTex == NULL) {
+        debug_send("Failed to load XTex.png\n");
+    }
 
-    size_t assetCount = sizeof(assets) / sizeof(assets[0]);
+    OTex = GRRLIB_LoadTexture(O_png);
+    if (OTex == NULL) {
+        debug_send("Failed to load OTex.png\n");
+    }
 
-    for (size_t i = 0; i < assetCount; i++) {
-        *(assets[i].texture) = GRRLIB_LoadTexture((const u8*)assets[i].filename);
-        if (*(assets[i].texture) == NULL) {
-            debug_send("Failed to load %s\n", assets[i].filename);
-        }
+    // p1 textures
+    p1CursorTex[0] = GRRLIB_LoadTexture(p1Move_png);
+    if (p1CursorTex[0] == NULL) {
+        debug_send("Failed to load p1 move.png\n");
+    }
+
+    p1CursorTex[1] = GRRLIB_LoadTexture(p1Select_png);
+    if (p1CursorTex[1] == NULL) {
+        debug_send("Failed to load p1 select.png\n");
+    }
+
+    p1CursorTex[2] = GRRLIB_LoadTexture(p1Win_png);
+    if (p1CursorTex[2] == NULL) {
+        debug_send("Failed to load p1 win.png\n");
+    }
+
+    p1CursorTex[3] = GRRLIB_LoadTexture(p1Draw_png);
+    if (p1CursorTex[3] == NULL) {
+        debug_send("Failed to load p1 draw.png\n");
+    }
+
+    // p2 textures
+    p2CursorTex[0] = GRRLIB_LoadTexture(p2Move_png);
+    if (p2CursorTex[0] == NULL) {
+        debug_send("Failed to load p2 move.png\n");
+    }
+
+    p2CursorTex[1] = GRRLIB_LoadTexture(p2Select_png);
+    if (p2CursorTex[1] == NULL) {
+        debug_send("Failed to load p2 select.png\n");
+    }
+
+    p2CursorTex[2] = GRRLIB_LoadTexture(p2Win_png);
+    if (p2CursorTex[2] == NULL) {
+        debug_send("Failed to load p2 win.png\n");
+    }
+
+    p2CursorTex[3] = GRRLIB_LoadTexture(p2Draw_png);
+    if (p2CursorTex[3] == NULL) {
+        debug_send("Failed to load p2 draw.png\n");
     }
 }
 
