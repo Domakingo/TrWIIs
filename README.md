@@ -14,16 +14,28 @@ Welcome to **trWIIs**, a fun and nostalgic version of the classic Tic-Tac-Toe ga
 This project started as a way to explore game development for the Wii and has grown into a labor of love. Despite limited documentation and steep learning curves, I dedicated myself fully to creating trWIIs. It's simple, yet I believe it carries the charm of the classic game we all know and love. 
 
 But this is just the beginning! Future updates will bring: 
-- **🎨 Exciting animations** for smoother and more dynamic gameplay. 
 - **✨ Secret challenges** to spice up the experience and test your skills. 
 
 ---
 
-## How to Play 
+## How to Play
 
-1. **🔄 Download the Game**: Head to the [Releases](https://github.com/domakingo/trWIIs/releases) section of this repository and download the `.dol` file. 
-2. **🕹️ Run on Dolphin Emulator**: Use the [Dolphin Emulator](https://dolphin-emu.org/) to load the `.dol` file and start playing! 
-3. **😃 Enjoy the Game**: Challenge yourself or a friend to a classic game of Tic-Tac-Toe on your Wii. 
+1. **🔄 Download the Game**: Head to the [Releases](https://github.com/domakingo/trWIIs/releases) section of this repository and download `TrWIIs.rar`, containing game file `TrWIIs.dol`.
+
+### Installation on Dolphin Emulator
+
+2. **🕹️ Run on Dolphin Emulator**: 
+   - Download and install the [Dolphin Emulator](https://dolphin-emu.org/).
+   - Open Dolphin Emulator and load the `TrWIIs.dol` file .
+   - Start playing!
+
+### Installation on Homebrew Wii
+
+2. **📀 Install on Homebrew Wii**:
+   - Copy the `TrWIIs` folder to your `apps` one in your WII SD Card or HDD.
+   - Insert the it into your Wii.
+   - Launch the Homebrew Channel and select TrWIIs.
+   - Enjoy the game directly on your Wii!
 
 ---
 
